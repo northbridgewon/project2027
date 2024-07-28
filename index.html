@@ -1,0 +1,188 @@
+<!-- Work in Progress-->
+
+<html><head><base href="https://project2027.wtf/" target="_blank"></head><body>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(45deg, #f3ec78, #af4261);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+    }
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .floating-box {
+        position: absolute;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+        max-width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    h1, h2 {
+        font-family: 'Georgia', serif;
+        color: #fff;
+    }
+    p {
+        font-family: 'Arial', sans-serif;
+        color: #f0f0f0;
+    }
+    .cta-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div id="floating-container">
+    <div class="floating-box" id="box1">
+        <h1>Restoring balance to a world in need</h1>
+        <p>We are dedicated to promoting social, economic, and environmental balance in a world where inequality, corruption, and environmental degradation are rampant.</p>
+        <a href="about" class="cta-button">Learn More</a>
+    </div>
+
+    <div class="floating-box" id="box2">
+        <h2>Social Justice</h2>
+        <p>We believe that everyone deserves to live with dignity and respect. Join our community to promote equality and human rights.</p>
+        <a href="social-justice" class="cta-button">Get Involved</a>
+    </div>
+
+    <div class="floating-box" id="box3">
+        <h2>Economic Justice</h2>
+        <p>We strive for an economy that serves all people, not just the privileged few. Explore ideas for a more equitable economic system.</p>
+        <a href="economic-justice" class="cta-button">Discover More</a>
+    </div>
+
+    <div class="floating-box" id="box4">
+        <h2>Environmental Justice</h2>
+        <p>The environment is a fundamental human right. Join us in promoting sustainability and environmental protection.</p>
+        <a href="environmental-justice" class="cta-button">Take Action</a>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script>
+    const boxes = document.querySelectorAll('.floating-box');
+
+    function initializePositions() {
+        boxes.forEach((box, index) => {
+            gsap.set(box, {
+                x: Math.random() * (window.innerWidth - 300),
+                y: Math.random() * (window.innerHeight - 200),
+                rotation: Math.random() * 10 - 5
+            });
+        });
+    }
+
+    function animateBoxes() {
+        boxes.forEach((box, index) => {
+            gsap.to(box, {
+                x: `+=${Math.random() * 100 - 50}`,
+                y: `+=${Math.random() * 100 - 50}`,
+                rotation: Math.random() * 10 - 5,
+                duration: 10 + Math.random() * 5,
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true
+            });
+        });
+    }
+
+    function handleResize() {
+        gsap.killTweensOf(boxes);
+        initializePositions();
+        animateBoxes();
+    }
+
+    initializePositions();
+    animateBoxes();
+
+    window.addEventListener('resize', handleResize);
+
+    // Collision detection and avoidance
+    function checkCollision() {
+        for (let i = 0; i < boxes.length; i++) {
+            for (let j = i + 1; j < boxes.length; j++) {
+                const box1 = boxes[i].getBoundingClientRect();
+                const box2 = boxes[j].getBoundingClientRect();
+
+                if (!(box1.right < box2.left || 
+                    box1.left > box2.right || 
+                    box1.bottom < box2.top || 
+                    box1.top > box2.bottom)) {
+                    // Collision detected, adjust positions
+                    gsap.to(boxes[i], {
+                        x: `-=${Math.random() * 50 + 25}`,
+                        y: `-=${Math.random() * 50 + 25}`,
+                        duration: 0.5
+                    });
+                    gsap.to(boxes[j], {
+                        x: `+=${Math.random() * 50 + 25}`,
+                        y: `+=${Math.random() * 50 + 25}`,
+                        duration: 0.5
+                    });
+                }
+            }
+        }
+        requestAnimationFrame(checkCollision);
+    }
+
+    checkCollision();
+
+    // Accessibility enhancements
+    boxes.forEach(box => {
+        box.setAttribute('tabindex', '0');
+        box.addEventListener('focus', () => {
+            gsap.to(box, {
+                scale: 1.05,
+                boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)',
+                duration: 0.3
+            });
+        });
+        box.addEventListener('blur', () => {
+            gsap.to(box, {
+                scale: 1,
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                duration: 0.3
+            });
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            document.body.classList.add('keyboard-nav');
+        }
+    });
+
+    document.addEventListener('mousedown', () => {
+        document.body.classList.remove('keyboard-nav');
+    });
+</script>
+</body>
+<footer>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EHLF701V4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EHLF701V4G');
+</script>
+</footer>
+</html>
